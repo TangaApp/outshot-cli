@@ -1,7 +1,8 @@
 name: Release
 
 # Publishes to npm when a version tag (v0.2.0) is pushed. npm's trusted publishing lets this
-# workflow publish without any stored token, and adds provenance (which commit built it).
+# workflow publish without any stored token; once the repository is public, npm also adds
+# provenance (which commit built it) by itself.
 on:
   push:
     tags: ['v*']
@@ -22,10 +23,12 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
+      - name: npm 11.5.1 or later (trusted publishing)
+        run: npm install -g npm@11
       - run: npm ci --ignore-scripts
       - name: The tag matches package.json, and is on main
         run: |
           test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
           git merge-base --is-ancestor "$GITHUB_SHA" origin/main
       - run: npm test
-      - run: npm publish --access public --provenance
+      - run: npm publish --access public

@@ -1,6 +1,6 @@
 {
   "name": "outshot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Run Outshot from your agent: review, edit, remake, keep and schedule the short-form TikTok videos Outshot makes for your brand.",
   "author": { "name": "Outshot", "url": "https://outshot.ai" },
   "homepage": "https://outshot.ai/docs/api",

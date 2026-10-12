@@ -1,6 +1,6 @@
 {
   "name": "outshot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Outshot from the command line: your short-form videos, for you and your AI agents.",
   "keywords": ["outshot", "tiktok", "short-form video", "cli", "ai agents", "claude code", "codex"],
   "homepage": "https://outshot.ai/docs/api",
