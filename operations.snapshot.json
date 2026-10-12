@@ -1,0 +1,4692 @@
+{
+  "api_url": "https://api.outshot.ai/v1",
+  "mcp_url": "https://mcp.outshot.ai/mcp",
+  "costs": {
+    "new_video": 10,
+    "new_demo_video": 15,
+    "regenerate_video": 8,
+    "swap_media": 2,
+    "edit_on_screen_words": 1,
+    "edit_caption_or_hashtags": 0,
+    "remove_closer": 1
+  },
+  "operations": [
+    {
+      "name": "get_brand",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/brand",
+      "summary": "What Outshot knows about the brand: product, audience, content themes, tone.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "get_brand",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "PillarItem": {
+            "properties": {
+              "theme": {
+                "default": "",
+                "maxLength": 300,
+                "title": "Theme",
+                "type": "string"
+              },
+              "audience_pain": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Audience Pain",
+                "type": "string"
+              },
+              "value_angle": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Value Angle",
+                "type": "string"
+              },
+              "rationale": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Rationale",
+                "type": "string"
+              }
+            },
+            "title": "PillarItem",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_idea_summary": {
+            "title": "Product Idea Summary",
+            "type": "string"
+          },
+          "project_url": {
+            "title": "Project Url",
+            "type": "string"
+          },
+          "target_audience": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Target Audience",
+            "type": "array"
+          },
+          "pillars": {
+            "items": {
+              "$ref": "#/$defs/PillarItem"
+            },
+            "title": "Pillars",
+            "type": "array"
+          },
+          "positioning_angle": {
+            "title": "Positioning Angle",
+            "type": "string"
+          },
+          "messaging_tone": {
+            "title": "Messaging Tone",
+            "type": "string"
+          },
+          "answers": {
+            "additionalProperties": true,
+            "title": "Answers",
+            "type": "object"
+          }
+        },
+        "required": [
+          "workspace_id",
+          "product_name",
+          "product_idea_summary",
+          "project_url",
+          "target_audience",
+          "pillars",
+          "positioning_angle",
+          "messaging_tone",
+          "answers"
+        ],
+        "title": "Brand",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_videos",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/videos",
+      "summary": "The videos waiting for a decision, oldest first. With a key that can make changes, reading it also asks for new videos when fewer than the target are waiting, as opening the app does (10 credits each, 15 for a Demo video).",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "list_videos",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "Credits": {
+            "properties": {
+              "balance": {
+                "title": "Balance",
+                "type": "integer"
+              },
+              "low": {
+                "title": "Low",
+                "type": "boolean"
+              },
+              "paid_ever": {
+                "title": "Paid Ever",
+                "type": "boolean"
+              },
+              "change_costs": {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "title": "Change Costs",
+                "type": "object"
+              }
+            },
+            "required": [
+              "balance",
+              "low",
+              "paid_ever",
+              "change_costs"
+            ],
+            "title": "Credits",
+            "type": "object"
+          },
+          "Video": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "rationale": {
+                "title": "Rationale",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "script": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Script"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "change_failed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Change Failed"
+              },
+              "updated_at": {
+                "title": "Updated At",
+                "type": "string"
+              },
+              "has_closer": {
+                "default": false,
+                "title": "Has Closer",
+                "type": "boolean"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Source"
+              },
+              "celebrate": {
+                "default": false,
+                "title": "Celebrate",
+                "type": "boolean"
+              },
+              "flagged_claims": {
+                "default": [],
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "title": "Flagged Claims",
+                "type": "array"
+              },
+              "stage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Stage"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "requested": {
+                "default": false,
+                "title": "Requested",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "format",
+              "rationale",
+              "caption",
+              "hashtags",
+              "script",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "change_failed",
+              "updated_at"
+            ],
+            "title": "Video",
+            "type": "object"
+          }
+        },
+        "description": "The videos waiting for a decision, oldest first, and how the deck stands.",
+        "properties": {
+          "videos": {
+            "items": {
+              "$ref": "#/$defs/Video"
+            },
+            "title": "Videos",
+            "type": "array"
+          },
+          "waiting": {
+            "title": "Waiting",
+            "type": "integer"
+          },
+          "target": {
+            "title": "Target",
+            "type": "integer"
+          },
+          "out_of_trends": {
+            "title": "Out Of Trends",
+            "type": "boolean"
+          },
+          "paused": {
+            "title": "Paused",
+            "type": "boolean"
+          },
+          "out_of_credits": {
+            "title": "Out Of Credits",
+            "type": "boolean"
+          },
+          "credits": {
+            "$ref": "#/$defs/Credits"
+          },
+          "tiktok_connected": {
+            "title": "Tiktok Connected",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "videos",
+          "waiting",
+          "target",
+          "out_of_trends",
+          "paused",
+          "out_of_credits",
+          "credits",
+          "tiktok_connected"
+        ],
+        "title": "VideoList",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_video",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/videos/{id}",
+      "summary": "One video as it is now. Use it to follow a change until its state is ready.",
+      "credits": null,
+      "destructive": false,
+      "id": "video_id",
+      "mcp_tool": "get_video",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "script": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Script"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "change_failed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Failed"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "has_closer": {
+            "default": false,
+            "title": "Has Closer",
+            "type": "boolean"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source"
+          },
+          "celebrate": {
+            "default": false,
+            "title": "Celebrate",
+            "type": "boolean"
+          },
+          "flagged_claims": {
+            "default": [],
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Flagged Claims",
+            "type": "array"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stage"
+          },
+          "hook": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Hook"
+          },
+          "requested": {
+            "default": false,
+            "title": "Requested",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "format",
+          "rationale",
+          "caption",
+          "hashtags",
+          "script",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "change_failed",
+          "updated_at"
+        ],
+        "title": "Video",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_calendar",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/calendar",
+      "summary": "Kept and posted videos, by posting day, with their TikTok links once posted: those still to come, and those of the last 30 days (past_days to go further back).",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "list_calendar",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "past_days": {
+            "default": 30,
+            "description": "Also the videos whose day was up to this many days ago (posted, or not). Those still to come are always there.",
+            "maximum": 730,
+            "minimum": 0,
+            "title": "Past Days",
+            "type": "integer"
+          }
+        },
+        "title": "CalendarRange",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "CalendarItem": {
+            "description": "A kept video on its posting day (the app's Calendar).",
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "scheduled_for": {
+                "title": "Scheduled For",
+                "type": "string"
+              },
+              "day": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Day"
+              },
+              "time": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Time"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "posted_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Posted At"
+              },
+              "post_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Post Url"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Error"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "scheduled_for",
+              "format",
+              "caption",
+              "hashtags",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "posted_at",
+              "error"
+            ],
+            "title": "CalendarItem",
+            "type": "object"
+          }
+        },
+        "description": "Kept and posted videos, by posting day.",
+        "properties": {
+          "videos": {
+            "items": {
+              "$ref": "#/$defs/CalendarItem"
+            },
+            "title": "Videos",
+            "type": "array"
+          }
+        },
+        "required": [
+          "videos"
+        ],
+        "title": "Calendar",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_content",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/content",
+      "summary": "Every video the brand kept, posted or skipped, each in its group: ready (kept with no day yet; or `missed`: its time passed without posting, or its send stopped midway), scheduled, posted, skipped (kept 30 days, until `deletes_on`).",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "list_content",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "ContentItem": {
+            "description": "A brand's video in Content: kept (with a day or not yet), posted, or skipped.",
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "scheduled_for": {
+                "title": "Scheduled For",
+                "type": "string"
+              },
+              "day": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Day"
+              },
+              "time": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Time"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "posted_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Posted At"
+              },
+              "post_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Post Url"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Error"
+              },
+              "group": {
+                "title": "Group",
+                "type": "string"
+              },
+              "missed": {
+                "default": false,
+                "title": "Missed",
+                "type": "boolean"
+              },
+              "kept_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Kept At"
+              },
+              "deletes_on": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Deletes On"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "scheduled_for",
+              "format",
+              "caption",
+              "hashtags",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "posted_at",
+              "error",
+              "group"
+            ],
+            "title": "ContentItem",
+            "type": "object"
+          }
+        },
+        "description": "Every video the brand kept, posted or skipped lately.",
+        "properties": {
+          "videos": {
+            "items": {
+              "$ref": "#/$defs/ContentItem"
+            },
+            "title": "Videos",
+            "type": "array"
+          },
+          "ready": {
+            "title": "Ready",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "videos",
+          "ready"
+        ],
+        "title": "ContentList",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_credits",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/credits",
+      "summary": "The credit balance, the plan, and what each thing uses.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "get_credits",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "balance": {
+            "title": "Balance",
+            "type": "integer"
+          },
+          "by_source": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "By Source",
+            "type": "object"
+          },
+          "free_expires_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Free Expires At"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan"
+          },
+          "costs": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Costs",
+            "type": "object"
+          }
+        },
+        "required": [
+          "balance",
+          "by_source",
+          "free_expires_at",
+          "plan",
+          "costs"
+        ],
+        "title": "CreditsView",
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_posting",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/posting",
+      "summary": "The posting days, the time and time zone videos post at, whether kept videos take the next open day by themselves (auto_schedule), and whether they post to TikTok by themselves.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "get_posting",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "TikTokPosting": {
+            "properties": {
+              "connected": {
+                "title": "Connected",
+                "type": "boolean"
+              },
+              "choice": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Choice"
+              }
+            },
+            "required": [
+              "connected"
+            ],
+            "title": "TikTokPosting",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "days": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Days",
+            "type": "array"
+          },
+          "auto_schedule": {
+            "title": "Auto Schedule",
+            "type": "boolean"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          },
+          "time_zone": {
+            "title": "Time Zone",
+            "type": "string"
+          },
+          "tiktok": {
+            "$ref": "#/$defs/TikTokPosting"
+          }
+        },
+        "required": [
+          "days",
+          "auto_schedule",
+          "time",
+          "time_zone",
+          "tiktok"
+        ],
+        "title": "Posting",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_trends",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/trends",
+      "summary": "The Library: trending TikToks the brand's videos are made from (how each is built, its reach), saved ones first. `makes`: what make_video_from_trend would make from it.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "list_trends",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Only trends built one way: slideshow, wall_of_text, hook_plus_footage or meme.",
+            "title": "Format"
+          }
+        },
+        "title": "TrendFilter",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "Trend": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "tiktok_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Tiktok Id"
+              },
+              "web_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Web Url"
+              },
+              "kind": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Kind"
+              },
+              "author_handle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Author Handle"
+              },
+              "caption": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Caption"
+              },
+              "posted_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Posted At"
+              },
+              "stats": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "default": {},
+                "title": "Stats",
+                "type": "object"
+              },
+              "duration_sec": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Duration Sec"
+              },
+              "slide_count": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Slide Count"
+              },
+              "format": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Format"
+              },
+              "format_label": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Format Label"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "angle": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Angle"
+              },
+              "message_core": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Message Core"
+              },
+              "structure": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Structure"
+              },
+              "visual_gag": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Visual Gag"
+              },
+              "beats": {
+                "default": [],
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "title": "Beats",
+                "type": "array"
+              },
+              "starred": {
+                "default": false,
+                "title": "Starred",
+                "type": "boolean"
+              },
+              "used": {
+                "default": false,
+                "title": "Used",
+                "type": "boolean"
+              },
+              "makes": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/TrendMakes"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "required": [
+              "id"
+            ],
+            "title": "Trend",
+            "type": "object"
+          },
+          "TrendMakes": {
+            "description": "What \"Make a video from this\" makes from the trend: its kind, and what it costs.",
+            "properties": {
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "credits": {
+                "title": "Credits",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "format",
+              "credits"
+            ],
+            "title": "TrendMakes",
+            "type": "object"
+          }
+        },
+        "description": "The Library: saved trends first, then the weekly plan's order.",
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/$defs/Trend"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "formats": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Formats",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "formats"
+        ],
+        "title": "TrendList",
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_demos",
+      "scope": "read",
+      "method": "GET",
+      "path": "/v1/demos",
+      "summary": "The product demos (screen recordings) that Demo videos are made with.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "list_demos",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "Demo": {
+            "description": "A product demo. `status`: uploaded, normalizing (being made ready), ready or failed.",
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "status": {
+                "title": "Status",
+                "type": "string"
+              },
+              "label": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Label"
+              },
+              "read": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Read"
+              },
+              "duration_sec": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Duration Sec"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Error"
+              },
+              "created_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Created At"
+              }
+            },
+            "required": [
+              "id",
+              "status"
+            ],
+            "title": "Demo",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "demos": {
+            "items": {
+              "$ref": "#/$defs/Demo"
+            },
+            "title": "Demos",
+            "type": "array"
+          },
+          "max": {
+            "title": "Max",
+            "type": "integer"
+          },
+          "per_week": {
+            "title": "Per Week",
+            "type": "integer"
+          },
+          "max_per_week": {
+            "title": "Max Per Week",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "demos",
+          "max",
+          "per_week",
+          "max_per_week"
+        ],
+        "title": "DemoList",
+        "type": "object"
+      }
+    },
+    {
+      "name": "update_brand",
+      "scope": "write",
+      "method": "PATCH",
+      "path": "/v1/brand",
+      "summary": "Change the brand's goal, tone, audience, words to avoid, or content themes. New videos follow the changes.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "update_brand",
+      "input_schema": {
+        "$defs": {
+          "Answers": {
+            "properties": {
+              "goal": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "followers",
+                      "visits",
+                      "sales",
+                      "awareness"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Goal"
+              },
+              "tone": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "playful",
+                      "bold",
+                      "calm",
+                      "expert"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Tone"
+              },
+              "audience": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 10,
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Audience"
+              },
+              "never_say": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "maxItems": 50,
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Never Say"
+              }
+            },
+            "title": "Answers",
+            "type": "object"
+          },
+          "PillarItem": {
+            "properties": {
+              "theme": {
+                "default": "",
+                "maxLength": 300,
+                "title": "Theme",
+                "type": "string"
+              },
+              "audience_pain": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Audience Pain",
+                "type": "string"
+              },
+              "value_angle": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Value Angle",
+                "type": "string"
+              },
+              "rationale": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Rationale",
+                "type": "string"
+              }
+            },
+            "title": "PillarItem",
+            "type": "object"
+          }
+        },
+        "additionalProperties": false,
+        "properties": {
+          "answers": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Answers"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The goal, tone, audience and words to avoid."
+          },
+          "pillars": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/$defs/PillarItem"
+                },
+                "maxItems": 8,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The content themes; at least one.",
+            "title": "Pillars"
+          }
+        },
+        "title": "BrandChanges",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "PillarItem": {
+            "properties": {
+              "theme": {
+                "default": "",
+                "maxLength": 300,
+                "title": "Theme",
+                "type": "string"
+              },
+              "audience_pain": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Audience Pain",
+                "type": "string"
+              },
+              "value_angle": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Value Angle",
+                "type": "string"
+              },
+              "rationale": {
+                "default": "",
+                "maxLength": 600,
+                "title": "Rationale",
+                "type": "string"
+              }
+            },
+            "title": "PillarItem",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "workspace_id": {
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_idea_summary": {
+            "title": "Product Idea Summary",
+            "type": "string"
+          },
+          "project_url": {
+            "title": "Project Url",
+            "type": "string"
+          },
+          "target_audience": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Target Audience",
+            "type": "array"
+          },
+          "pillars": {
+            "items": {
+              "$ref": "#/$defs/PillarItem"
+            },
+            "title": "Pillars",
+            "type": "array"
+          },
+          "positioning_angle": {
+            "title": "Positioning Angle",
+            "type": "string"
+          },
+          "messaging_tone": {
+            "title": "Messaging Tone",
+            "type": "string"
+          },
+          "answers": {
+            "additionalProperties": true,
+            "title": "Answers",
+            "type": "object"
+          }
+        },
+        "required": [
+          "workspace_id",
+          "product_name",
+          "product_idea_summary",
+          "project_url",
+          "target_audience",
+          "pillars",
+          "positioning_angle",
+          "messaging_tone",
+          "answers"
+        ],
+        "title": "Brand",
+        "type": "object"
+      }
+    },
+    {
+      "name": "skip_video",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/skip",
+      "summary": "Pass on a waiting video. A new one is made in its place (10 credits each, 15 for a Demo video).",
+      "credits": null,
+      "destructive": false,
+      "id": "video_id",
+      "mcp_tool": "skip_video",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "script": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Script"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "change_failed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Failed"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "has_closer": {
+            "default": false,
+            "title": "Has Closer",
+            "type": "boolean"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source"
+          },
+          "celebrate": {
+            "default": false,
+            "title": "Celebrate",
+            "type": "boolean"
+          },
+          "flagged_claims": {
+            "default": [],
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Flagged Claims",
+            "type": "array"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stage"
+          },
+          "hook": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Hook"
+          },
+          "requested": {
+            "default": false,
+            "title": "Requested",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "format",
+          "rationale",
+          "caption",
+          "hashtags",
+          "script",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "change_failed",
+          "updated_at"
+        ],
+        "title": "Video",
+        "type": "object"
+      }
+    },
+    {
+      "name": "undo_video",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/undo",
+      "summary": "Take back a decision: a skipped or kept video goes back to waiting.",
+      "credits": null,
+      "destructive": false,
+      "id": "video_id",
+      "mcp_tool": "undo_video",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "script": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Script"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "change_failed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Failed"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "has_closer": {
+            "default": false,
+            "title": "Has Closer",
+            "type": "boolean"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source"
+          },
+          "celebrate": {
+            "default": false,
+            "title": "Celebrate",
+            "type": "boolean"
+          },
+          "flagged_claims": {
+            "default": [],
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Flagged Claims",
+            "type": "array"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stage"
+          },
+          "hook": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Hook"
+          },
+          "requested": {
+            "default": false,
+            "title": "Requested",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "format",
+          "rationale",
+          "caption",
+          "hashtags",
+          "script",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "change_failed",
+          "updated_at"
+        ],
+        "title": "Video",
+        "type": "object"
+      }
+    },
+    {
+      "name": "edit_video",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/edit",
+      "summary": "Change a video's words. Changing the caption or hashtags is free and immediate; changing words on screen remakes the video.",
+      "credits": "0-1",
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "edit_video",
+      "input_schema": {
+        "additionalProperties": false,
+        "description": "The words to change (only fields sent change). On-screen words remake the video;\nthe caption and hashtags are stored at once.",
+        "properties": {
+          "text": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The words on screen (meme and wall_of_text videos).",
+            "title": "Text"
+          },
+          "slides": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Each slide's words, in order (slideshows).",
+            "title": "Slides"
+          },
+          "hook_text": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The opening line (Demo videos).",
+            "title": "Hook Text"
+          },
+          "demo_caption": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The line over the demo (Demo videos).",
+            "title": "Demo Caption"
+          },
+          "payoff_text": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The closing line (Demo videos).",
+            "title": "Payoff Text"
+          },
+          "caption": {
+            "anyOf": [
+              {
+                "maxLength": 2200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The post's caption. Free, and changed at once.",
+            "title": "Caption"
+          },
+          "hashtags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 30,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Hashtags, without #. Free, and changed at once.",
+            "title": "Hashtags"
+          }
+        },
+        "title": "EditWords",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "Video": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "rationale": {
+                "title": "Rationale",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "script": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Script"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "change_failed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Change Failed"
+              },
+              "updated_at": {
+                "title": "Updated At",
+                "type": "string"
+              },
+              "has_closer": {
+                "default": false,
+                "title": "Has Closer",
+                "type": "boolean"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Source"
+              },
+              "celebrate": {
+                "default": false,
+                "title": "Celebrate",
+                "type": "boolean"
+              },
+              "flagged_claims": {
+                "default": [],
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "title": "Flagged Claims",
+                "type": "array"
+              },
+              "stage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Stage"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "requested": {
+                "default": false,
+                "title": "Requested",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "format",
+              "rationale",
+              "caption",
+              "hashtags",
+              "script",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "change_failed",
+              "updated_at"
+            ],
+            "title": "Video",
+            "type": "object"
+          }
+        },
+        "description": "A change to a video. `queued`: the new version is being made; follow it with\nget_video until its state is `ready`.",
+        "properties": {
+          "queued": {
+            "title": "Queued",
+            "type": "boolean"
+          },
+          "video": {
+            "$ref": "#/$defs/Video"
+          }
+        },
+        "required": [
+          "queued",
+          "video"
+        ],
+        "title": "Change",
+        "type": "object"
+      }
+    },
+    {
+      "name": "swap_media",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/swap",
+      "summary": "Swap one picture or clip in a video for the next pick, and remake it.",
+      "credits": "2",
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "swap_media",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "slot": {
+            "description": "What to swap. meme: meme_clip or background; wall_of_text: broll or music; hook_demo: opener or music; slideshow: images (with slide).",
+            "maxLength": 40,
+            "title": "Slot",
+            "type": "string"
+          },
+          "slide": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "For a slideshow: which slide, from 0.",
+            "title": "Slide"
+          }
+        },
+        "required": [
+          "slot"
+        ],
+        "title": "SwapMedia",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "Video": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "rationale": {
+                "title": "Rationale",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "script": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Script"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "change_failed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Change Failed"
+              },
+              "updated_at": {
+                "title": "Updated At",
+                "type": "string"
+              },
+              "has_closer": {
+                "default": false,
+                "title": "Has Closer",
+                "type": "boolean"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Source"
+              },
+              "celebrate": {
+                "default": false,
+                "title": "Celebrate",
+                "type": "boolean"
+              },
+              "flagged_claims": {
+                "default": [],
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "title": "Flagged Claims",
+                "type": "array"
+              },
+              "stage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Stage"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "requested": {
+                "default": false,
+                "title": "Requested",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "format",
+              "rationale",
+              "caption",
+              "hashtags",
+              "script",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "change_failed",
+              "updated_at"
+            ],
+            "title": "Video",
+            "type": "object"
+          }
+        },
+        "description": "A change to a video. `queued`: the new version is being made; follow it with\nget_video until its state is `ready`.",
+        "properties": {
+          "queued": {
+            "title": "Queued",
+            "type": "boolean"
+          },
+          "video": {
+            "$ref": "#/$defs/Video"
+          }
+        },
+        "required": [
+          "queued",
+          "video"
+        ],
+        "title": "Change",
+        "type": "object"
+      }
+    },
+    {
+      "name": "regenerate_video",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/regenerate",
+      "summary": "Make a video again from the same trend, with new words and media.",
+      "credits": "8",
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "regenerate_video",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "Video": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "rationale": {
+                "title": "Rationale",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "script": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Script"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "change_failed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Change Failed"
+              },
+              "updated_at": {
+                "title": "Updated At",
+                "type": "string"
+              },
+              "has_closer": {
+                "default": false,
+                "title": "Has Closer",
+                "type": "boolean"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Source"
+              },
+              "celebrate": {
+                "default": false,
+                "title": "Celebrate",
+                "type": "boolean"
+              },
+              "flagged_claims": {
+                "default": [],
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "title": "Flagged Claims",
+                "type": "array"
+              },
+              "stage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Stage"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "requested": {
+                "default": false,
+                "title": "Requested",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "format",
+              "rationale",
+              "caption",
+              "hashtags",
+              "script",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "change_failed",
+              "updated_at"
+            ],
+            "title": "Video",
+            "type": "object"
+          }
+        },
+        "description": "A change to a video. `queued`: the new version is being made; follow it with\nget_video until its state is `ready`.",
+        "properties": {
+          "queued": {
+            "title": "Queued",
+            "type": "boolean"
+          },
+          "video": {
+            "$ref": "#/$defs/Video"
+          }
+        },
+        "required": [
+          "queued",
+          "video"
+        ],
+        "title": "Change",
+        "type": "object"
+      }
+    },
+    {
+      "name": "remove_closer",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/remove-closer",
+      "summary": "Remake a Demo video without its closing reaction.",
+      "credits": "1",
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "remove_closer",
+      "input_schema": null,
+      "output_schema": {
+        "$defs": {
+          "Video": {
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "state": {
+                "title": "State",
+                "type": "string"
+              },
+              "format": {
+                "title": "Format",
+                "type": "string"
+              },
+              "rationale": {
+                "title": "Rationale",
+                "type": "string"
+              },
+              "caption": {
+                "title": "Caption",
+                "type": "string"
+              },
+              "hashtags": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Hashtags",
+                "type": "array"
+              },
+              "script": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Script"
+              },
+              "video_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Video Url"
+              },
+              "slide_urls": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "Slide Urls",
+                "type": "array"
+              },
+              "poster_url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Poster Url"
+              },
+              "change_failed": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Change Failed"
+              },
+              "updated_at": {
+                "title": "Updated At",
+                "type": "string"
+              },
+              "has_closer": {
+                "default": false,
+                "title": "Has Closer",
+                "type": "boolean"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Source"
+              },
+              "celebrate": {
+                "default": false,
+                "title": "Celebrate",
+                "type": "boolean"
+              },
+              "flagged_claims": {
+                "default": [],
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "title": "Flagged Claims",
+                "type": "array"
+              },
+              "stage": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Stage"
+              },
+              "hook": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Hook"
+              },
+              "requested": {
+                "default": false,
+                "title": "Requested",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "state",
+              "format",
+              "rationale",
+              "caption",
+              "hashtags",
+              "script",
+              "video_url",
+              "slide_urls",
+              "poster_url",
+              "change_failed",
+              "updated_at"
+            ],
+            "title": "Video",
+            "type": "object"
+          }
+        },
+        "description": "A change to a video. `queued`: the new version is being made; follow it with\nget_video until its state is `ready`.",
+        "properties": {
+          "queued": {
+            "title": "Queued",
+            "type": "boolean"
+          },
+          "video": {
+            "$ref": "#/$defs/Video"
+          }
+        },
+        "required": [
+          "queued",
+          "video"
+        ],
+        "title": "Change",
+        "type": "object"
+      }
+    },
+    {
+      "name": "set_posting_days",
+      "scope": "write",
+      "method": "PUT",
+      "path": "/v1/posting/days",
+      "summary": "Choose the days that get a video (one video a day). Kept videos stay on their day.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "set_posting_days",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "days": {
+            "description": "The days that get a video: mon, tue, wed, thu, fri, sat, sun.",
+            "items": {
+              "enum": [
+                "mon",
+                "tue",
+                "wed",
+                "thu",
+                "fri",
+                "sat",
+                "sun"
+              ],
+              "type": "string"
+            },
+            "maxItems": 7,
+            "minItems": 1,
+            "title": "Days",
+            "type": "array"
+          }
+        },
+        "required": [
+          "days"
+        ],
+        "title": "PostingDays",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "TikTokPosting": {
+            "properties": {
+              "connected": {
+                "title": "Connected",
+                "type": "boolean"
+              },
+              "choice": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Choice"
+              }
+            },
+            "required": [
+              "connected"
+            ],
+            "title": "TikTokPosting",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "days": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Days",
+            "type": "array"
+          },
+          "auto_schedule": {
+            "title": "Auto Schedule",
+            "type": "boolean"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          },
+          "time_zone": {
+            "title": "Time Zone",
+            "type": "string"
+          },
+          "tiktok": {
+            "$ref": "#/$defs/TikTokPosting"
+          }
+        },
+        "required": [
+          "days",
+          "auto_schedule",
+          "time",
+          "time_zone",
+          "tiktok"
+        ],
+        "title": "Posting",
+        "type": "object"
+      }
+    },
+    {
+      "name": "update_posting",
+      "scope": "write",
+      "method": "PATCH",
+      "path": "/v1/posting",
+      "summary": "Change the posting days, auto-schedule, the time or the time zone. Kept videos keep their day; a new time moves the ones still to come to it.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "update_posting",
+      "input_schema": {
+        "additionalProperties": false,
+        "description": "What to change (only what's sent changes).",
+        "properties": {
+          "days": {
+            "anyOf": [
+              {
+                "items": {
+                  "enum": [
+                    "mon",
+                    "tue",
+                    "wed",
+                    "thu",
+                    "fri",
+                    "sat",
+                    "sun"
+                  ],
+                  "type": "string"
+                },
+                "maxItems": 7,
+                "minItems": 1,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The days that get a video: mon, tue, wed, thu, fri, sat, sun.",
+            "title": "Days"
+          },
+          "auto_schedule": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "true: each kept video takes the next open posting day by itself. false: kept videos wait with no day until one is given (place_video).",
+            "title": "Auto Schedule"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "pattern": "^([01]\\d|2[0-3]):(00|15|30|45)$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "When videos post, HH:MM on the quarter hour, in the brand's time zone. Videos still to come move to it, on their own day.",
+            "title": "Time"
+          },
+          "time_zone": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The brand's time zone, like Europe/Paris or America/New_York.",
+            "title": "Time Zone"
+          }
+        },
+        "title": "PostingChanges",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "TikTokPosting": {
+            "properties": {
+              "connected": {
+                "title": "Connected",
+                "type": "boolean"
+              },
+              "choice": {
+                "anyOf": [
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Choice"
+              }
+            },
+            "required": [
+              "connected"
+            ],
+            "title": "TikTokPosting",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "days": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Days",
+            "type": "array"
+          },
+          "auto_schedule": {
+            "title": "Auto Schedule",
+            "type": "boolean"
+          },
+          "time": {
+            "title": "Time",
+            "type": "string"
+          },
+          "time_zone": {
+            "title": "Time Zone",
+            "type": "string"
+          },
+          "tiktok": {
+            "$ref": "#/$defs/TikTokPosting"
+          }
+        },
+        "required": [
+          "days",
+          "auto_schedule",
+          "time",
+          "time_zone",
+          "tiktok"
+        ],
+        "title": "Posting",
+        "type": "object"
+      }
+    },
+    {
+      "name": "answer_missed",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/videos/{id}/missed",
+      "summary": "Say whether a `missed` video (list_content) is on TikTok: its time passed without posting (posted by hand?), or its send stopped midway. Yes: it's marked posted; no: it waits in ready for a new day.",
+      "credits": null,
+      "destructive": false,
+      "id": "video_id",
+      "mcp_tool": "answer_missed",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "posted": {
+            "description": "true: it was posted by hand on its day (it's marked posted). false: it wasn't (it waits in Ready, with no day).",
+            "title": "Posted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "posted"
+        ],
+        "title": "MissedAnswer",
+        "type": "object"
+      },
+      "output_schema": {
+        "description": "A brand's video in Content: kept (with a day or not yet), posted, or skipped.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "scheduled_for": {
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "day": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Day"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Time"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "posted_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Posted At"
+          },
+          "post_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Post Url"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "missed": {
+            "default": false,
+            "title": "Missed",
+            "type": "boolean"
+          },
+          "kept_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Kept At"
+          },
+          "deletes_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Deletes On"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "scheduled_for",
+          "format",
+          "caption",
+          "hashtags",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "posted_at",
+          "error",
+          "group"
+        ],
+        "title": "ContentItem",
+        "type": "object"
+      }
+    },
+    {
+      "name": "create_demo_upload",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/demos",
+      "summary": "Add a product demo: a 5 to 20 second screen recording. Gives back where to upload it.",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "create_demo_upload",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "filename": {
+            "description": "The video's file name: .mp4, .mov or .webm.",
+            "maxLength": 300,
+            "title": "Filename",
+            "type": "string"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Size Bytes"
+          }
+        },
+        "required": [
+          "filename"
+        ],
+        "title": "DemoUpload",
+        "type": "object"
+      },
+      "output_schema": {
+        "$defs": {
+          "Demo": {
+            "description": "A product demo. `status`: uploaded, normalizing (being made ready), ready or failed.",
+            "properties": {
+              "id": {
+                "title": "Id",
+                "type": "string"
+              },
+              "status": {
+                "title": "Status",
+                "type": "string"
+              },
+              "label": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Label"
+              },
+              "read": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Read"
+              },
+              "duration_sec": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Duration Sec"
+              },
+              "url": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Url"
+              },
+              "error": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Error"
+              },
+              "created_at": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Created At"
+              }
+            },
+            "required": [
+              "id",
+              "status"
+            ],
+            "title": "Demo",
+            "type": "object"
+          },
+          "UploadTarget": {
+            "properties": {
+              "url": {
+                "title": "Url",
+                "type": "string"
+              },
+              "content_type": {
+                "title": "Content Type",
+                "type": "string"
+              },
+              "max_bytes": {
+                "title": "Max Bytes",
+                "type": "integer"
+              },
+              "min_sec": {
+                "title": "Min Sec",
+                "type": "integer"
+              },
+              "max_sec": {
+                "title": "Max Sec",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "url",
+              "content_type",
+              "max_bytes",
+              "min_sec",
+              "max_sec"
+            ],
+            "title": "UploadTarget",
+            "type": "object"
+          }
+        },
+        "description": "The new demo, and where to send its video: PUT the file's bytes to `upload.url`\nwith its `content_type`, then call complete_demo_upload.",
+        "properties": {
+          "demo": {
+            "$ref": "#/$defs/Demo"
+          },
+          "upload": {
+            "$ref": "#/$defs/UploadTarget"
+          }
+        },
+        "required": [
+          "demo",
+          "upload"
+        ],
+        "title": "DemoUploadStarted",
+        "type": "object"
+      }
+    },
+    {
+      "name": "complete_demo_upload",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/demos/{id}/complete",
+      "summary": "Say a demo's video is uploaded. It's checked and made ready in the background. The brand's first demo then gets a Demo video made with it (15 credits).",
+      "credits": null,
+      "destructive": false,
+      "id": "demo_id",
+      "mcp_tool": "complete_demo_upload",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "cut": {
+            "default": false,
+            "description": "Longer than 20 seconds: keep the first 20.",
+            "title": "Cut",
+            "type": "boolean"
+          }
+        },
+        "title": "DemoComplete",
+        "type": "object"
+      },
+      "output_schema": {
+        "description": "A product demo. `status`: uploaded, normalizing (being made ready), ready or failed.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Label"
+          },
+          "read": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Read"
+          },
+          "duration_sec": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Duration Sec"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Error"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Created At"
+          }
+        },
+        "required": [
+          "id",
+          "status"
+        ],
+        "title": "Demo",
+        "type": "object"
+      }
+    },
+    {
+      "name": "set_demo_line",
+      "scope": "write",
+      "method": "PATCH",
+      "path": "/v1/demos/{id}",
+      "summary": "Say what a demo shows. Demo videos made with it follow the line. With the brand's first demo, a Demo video is then made with it (15 credits).",
+      "credits": null,
+      "destructive": false,
+      "id": "demo_id",
+      "mcp_tool": "set_demo_line",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "line": {
+            "description": "What the demo shows, in a few words.",
+            "maxLength": 240,
+            "title": "Line",
+            "type": "string"
+          }
+        },
+        "required": [
+          "line"
+        ],
+        "title": "DemoLine",
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "demo_video_coming": {
+            "title": "Demo Video Coming",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "status",
+          "demo_video_coming"
+        ],
+        "title": "DemoLineSaved",
+        "type": "object"
+      }
+    },
+    {
+      "name": "make_video_from_trend",
+      "scope": "write",
+      "method": "POST",
+      "path": "/v1/trends/{id}/make",
+      "summary": "Make a video now from a trend in the Library: it's first in the deck (list_videos) in about half a minute. A trend built around a hook becomes a Demo video when the brand has a demo.",
+      "credits": "10-15",
+      "destructive": false,
+      "id": "trend_id",
+      "mcp_tool": "make_video_from_trend",
+      "input_schema": null,
+      "output_schema": {
+        "description": "The video is being made: it's first in the deck (list_videos) in about half a minute.",
+        "properties": {
+          "trend_id": {
+            "title": "Trend Id",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "credits": {
+            "title": "Credits",
+            "type": "integer"
+          },
+          "queued": {
+            "default": true,
+            "title": "Queued",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "trend_id",
+          "format",
+          "credits"
+        ],
+        "title": "MadeFromTrend",
+        "type": "object"
+      }
+    },
+    {
+      "name": "set_demo_rhythm",
+      "scope": "write",
+      "method": "PUT",
+      "path": "/v1/demos/rhythm",
+      "summary": "How many Demo videos a week (0 to 3).",
+      "credits": null,
+      "destructive": false,
+      "id": null,
+      "mcp_tool": "set_demo_rhythm",
+      "input_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "per_week": {
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Per Week",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "per_week"
+        ],
+        "title": "DemoRhythm",
+        "type": "object"
+      },
+      "output_schema": {
+        "properties": {
+          "per_week": {
+            "title": "Per Week",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "per_week"
+        ],
+        "title": "DemoRhythmSaved",
+        "type": "object"
+      }
+    },
+    {
+      "name": "delete_demo",
+      "scope": "write",
+      "method": "DELETE",
+      "path": "/v1/demos/{id}",
+      "summary": "Delete a product demo. It can't be undone.",
+      "credits": null,
+      "destructive": true,
+      "id": "demo_id",
+      "mcp_tool": "delete_demo",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "deleted": {
+            "default": true,
+            "title": "Deleted",
+            "type": "boolean"
+          }
+        },
+        "title": "Deleted",
+        "type": "object"
+      }
+    },
+    {
+      "name": "approve_video",
+      "scope": "publish",
+      "method": "POST",
+      "path": "/v1/videos/{id}/approve",
+      "summary": "Keep a video: it takes the next free posting day (with auto_schedule off, it waits in ready with no day). With TikTok connected it then posts there by itself on that day, with the brand's saved TikTok choices. With a key that can also make changes, a new video is made in its place (10 credits each, 15 for a Demo video).",
+      "credits": null,
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "approve_video",
+      "input_schema": null,
+      "output_schema": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "rationale": {
+            "title": "Rationale",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "script": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Script"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "change_failed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Failed"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string"
+          },
+          "has_closer": {
+            "default": false,
+            "title": "Has Closer",
+            "type": "boolean"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source"
+          },
+          "celebrate": {
+            "default": false,
+            "title": "Celebrate",
+            "type": "boolean"
+          },
+          "flagged_claims": {
+            "default": [],
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "title": "Flagged Claims",
+            "type": "array"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stage"
+          },
+          "hook": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Hook"
+          },
+          "requested": {
+            "default": false,
+            "title": "Requested",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "format",
+          "rationale",
+          "caption",
+          "hashtags",
+          "script",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "change_failed",
+          "updated_at"
+        ],
+        "title": "Video",
+        "type": "object"
+      }
+    },
+    {
+      "name": "schedule_video",
+      "scope": "publish",
+      "method": "POST",
+      "path": "/v1/calendar/{id}/schedule",
+      "summary": "Set a kept video, made before TikTok was connected, to post to TikTok by itself on its day, with the brand's saved TikTok choices. Only one waiting to be posted by hand whose time is still ahead: one whose time has passed may already be on TikTok.",
+      "credits": null,
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "schedule_video",
+      "input_schema": null,
+      "output_schema": {
+        "description": "A kept video on its posting day (the app's Calendar).",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "scheduled_for": {
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "day": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Day"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Time"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "posted_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Posted At"
+          },
+          "post_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Post Url"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "scheduled_for",
+          "format",
+          "caption",
+          "hashtags",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "posted_at",
+          "error"
+        ],
+        "title": "CalendarItem",
+        "type": "object"
+      }
+    },
+    {
+      "name": "place_video",
+      "scope": "publish",
+      "method": "POST",
+      "path": "/v1/videos/{id}/place",
+      "summary": "Give a kept, skipped or unposted video a day, or move one to another day (one video a day; swap to trade days with the video there). No day: the next open posting day. With TikTok connected it then posts there by itself, with the brand's saved TikTok choices.",
+      "credits": null,
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "place_video",
+      "input_schema": {
+        "additionalProperties": false,
+        "description": "The day to give a video. No day: the next open posting day.",
+        "properties": {
+          "day": {
+            "anyOf": [
+              {
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The brand's own date (YYYY-MM-DD), from tomorrow on, or today while its posting time is at least 30 minutes away. Left out: the next open posting day.",
+            "title": "Day"
+          },
+          "swap": {
+            "default": false,
+            "description": "When another video has that day: swap the two (only for a video that has a day of its own). Otherwise a taken day is refused.",
+            "title": "Swap",
+            "type": "boolean"
+          }
+        },
+        "title": "PlaceDay",
+        "type": "object"
+      },
+      "output_schema": {
+        "description": "A brand's video in Content: kept (with a day or not yet), posted, or skipped.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "scheduled_for": {
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "day": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Day"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Time"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "posted_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Posted At"
+          },
+          "post_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Post Url"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "missed": {
+            "default": false,
+            "title": "Missed",
+            "type": "boolean"
+          },
+          "kept_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Kept At"
+          },
+          "deletes_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Deletes On"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "scheduled_for",
+          "format",
+          "caption",
+          "hashtags",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "posted_at",
+          "error",
+          "group"
+        ],
+        "title": "ContentItem",
+        "type": "object"
+      }
+    },
+    {
+      "name": "post_video_now",
+      "scope": "publish",
+      "method": "POST",
+      "path": "/v1/videos/{id}/post-now",
+      "summary": "Post a kept, skipped or unposted video to TikTok now (it goes out within 15 minutes), with the brand's saved TikTok choices. TikTok must be connected.",
+      "credits": null,
+      "destructive": true,
+      "id": "video_id",
+      "mcp_tool": "post_video_now",
+      "input_schema": null,
+      "output_schema": {
+        "description": "A brand's video in Content: kept (with a day or not yet), posted, or skipped.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "scheduled_for": {
+            "title": "Scheduled For",
+            "type": "string"
+          },
+          "day": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Day"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Time"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "caption": {
+            "title": "Caption",
+            "type": "string"
+          },
+          "hashtags": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Hashtags",
+            "type": "array"
+          },
+          "video_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Video Url"
+          },
+          "slide_urls": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Slide Urls",
+            "type": "array"
+          },
+          "poster_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Poster Url"
+          },
+          "posted_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Posted At"
+          },
+          "post_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Post Url"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "group": {
+            "title": "Group",
+            "type": "string"
+          },
+          "missed": {
+            "default": false,
+            "title": "Missed",
+            "type": "boolean"
+          },
+          "kept_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Kept At"
+          },
+          "deletes_on": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Deletes On"
+          }
+        },
+        "required": [
+          "id",
+          "state",
+          "scheduled_for",
+          "format",
+          "caption",
+          "hashtags",
+          "video_url",
+          "slide_urls",
+          "poster_url",
+          "posted_at",
+          "error",
+          "group"
+        ],
+        "title": "ContentItem",
+        "type": "object"
+      }
+    }
+  ]
+}

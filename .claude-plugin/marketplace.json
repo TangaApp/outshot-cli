@@ -1,0 +1,15 @@
+{
+  "name": "outshot",
+  "owner": { "name": "Outshot", "url": "https://outshot.ai" },
+  "metadata": {
+    "description": "Outshot's plugin for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "outshot",
+      "source": "./plugin",
+      "description": "Run Outshot from your agent: review, edit, remake, keep and schedule the short-form TikTok videos Outshot makes for your brand.",
+      "category": "productivity"
+    }
+  ]
+}

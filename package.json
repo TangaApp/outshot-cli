@@ -1,0 +1,37 @@
+{
+  "name": "outshot",
+  "version": "0.1.0",
+  "description": "Outshot from the command line: your short-form videos, for you and your AI agents.",
+  "keywords": ["outshot", "tiktok", "short-form video", "cli", "ai agents", "claude code", "codex"],
+  "homepage": "https://outshot.ai/docs/api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/outshot-ai/outshot.git"
+  },
+  "bugs": "https://github.com/outshot-ai/outshot/issues",
+  "license": "MIT",
+  "author": "Outshot",
+  "type": "module",
+  "bin": {
+    "outshot": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "operations.snapshot.json"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test \"test/unit/*.test.mjs\"",
+    "test:live": "npm run build && node --test --test-concurrency=1 \"test/live/*.test.mjs\"",
+    "snapshot": "node scripts/snapshot.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "~6.0.2"
+  }
+}
