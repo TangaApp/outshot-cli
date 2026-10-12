@@ -72,8 +72,8 @@ Errors are JSON on stderr, `{"error": {"code", "message"}}`, with an exit code:
 The skill teaches an agent how to use Outshot well: check the key, say what a change costs,
 follow remakes, and ask before keeping or posting anything.
 
-- **Claude Code:** `/plugin marketplace add outshot-ai/outshot`, then `/plugin install outshot@outshot`
-- **Codex and other agents:** `npx skills add outshot-ai/outshot`
+- **Claude Code:** `/plugin marketplace add TangaApp/outshot-cli`, then `/plugin install outshot@outshot`
+- **Codex and other agents:** `npx skills add TangaApp/outshot-cli`
 
 Prefer MCP? Outshot also has an MCP server: see [Connect your agent](https://outshot.ai/docs/api#connect).
 

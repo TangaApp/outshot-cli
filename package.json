@@ -6,9 +6,9 @@
   "homepage": "https://outshot.ai/docs/api",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outshot-ai/outshot.git"
+    "url": "git+https://github.com/TangaApp/outshot-cli.git"
   },
-  "bugs": "https://github.com/outshot-ai/outshot/issues",
+  "bugs": "https://github.com/TangaApp/outshot-cli/issues",
   "license": "MIT",
   "author": "Outshot",
   "type": "module",

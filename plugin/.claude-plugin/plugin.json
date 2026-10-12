@@ -4,7 +4,7 @@
   "description": "Run Outshot from your agent: review, edit, remake, keep and schedule the short-form TikTok videos Outshot makes for your brand.",
   "author": { "name": "Outshot", "url": "https://outshot.ai" },
   "homepage": "https://outshot.ai/docs/api",
-  "repository": "https://github.com/outshot-ai/outshot",
+  "repository": "https://github.com/TangaApp/outshot-cli",
   "license": "MIT",
   "keywords": ["outshot", "tiktok", "short-form video", "content", "social media"]
 }
